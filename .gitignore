@@ -1,0 +1,15 @@
+.*.swp
+.DS_Store
+.env
+.idea
+.vscode
+.npmrc
+.pgdata*
+*.iml
+*.log
+dist
+build-output
+coverage
+node_modules
+store.db
+tmp
