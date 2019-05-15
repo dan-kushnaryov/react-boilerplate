@@ -5,23 +5,31 @@ import { Button } from 'react-bootstrap'
 import React from 'react'
 import todosApi from '../common/api/todos'
 import TodosList from '../components/TodosList'
+import { ThemeContext, themes } from '../common/theme-context'
+import ThemedButton from '../components/ThemedButton'
+
+function Toolbar (props) {
+  return (
+    <ThemedButton onClick={props.toggleTheme}>
+      Change Theme
+    </ThemedButton>
+  )
+}
 
 export default class Landing extends React.Component {
-  constructor (props) {
-    super(props)
+  searchInput = React.createRef()
 
-    this.searchInput = React.createRef()
-    this.sort = {
-      id: 'asc',
-      title: 'asc',
-      completed: 'asc',
-      userId: 'asc',
-    }
+  sort = {
+    id: 'asc',
+    title: 'asc',
+    completed: 'asc',
+    userId: 'asc',
+  }
 
-    this.state = {
-      todos: [],
-      sort: this.sort,
-    }
+  state = {
+    todos: [],
+    sort: this.sort,
+    theme: themes.light,
   }
 
   async componentDidMount () {
@@ -30,6 +38,15 @@ export default class Landing extends React.Component {
     this.searchInput.current.focus()
 
     this.setState({ todos })
+  }
+
+  toggleTheme = () => {
+    this.setState(state => ({
+      theme:
+        state.theme === themes.dark
+          ? themes.light
+          : themes.dark,
+    }))
   }
 
   sortBy (field) {
@@ -50,6 +67,10 @@ export default class Landing extends React.Component {
 
     return (
       <div>
+        <ThemeContext.Provider value={this.state.theme}>
+          <Toolbar toggleTheme={this.toggleTheme} />
+        </ThemeContext.Provider>
+
         <Button variant='primary'>Primary</Button>
         <form>
           Title: <input ref={this.searchInput} type='search' />
